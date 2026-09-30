@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00B14F">
+<title>IndoManager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <div class="avatar">IM</div>
+        <div class="header-info">
+            <span class="header-label">Selamat datang,</span>
+            <span class="header-name">Manager</span>
+        </div>
+    </div>
+    <div class="header-right">
+        <button class="icon-btn" onclick="nextDay()" title="Hari Berikutnya">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="13 17 18 12 13 7"></polyline>
+                <polyline points="6 17 11 12 6 7"></polyline>
+            </svg>
+        </button>
+    </div>
+</header>
+
+<main>
+
+<section id="tab-dashboard" class="tab-content active">
+
+    <div class="balance-card">
+        <div class="balance-label">Saldo Anda</div>
+        <div class="balance-amount" id="balance-amount">Rp 5.000.000</div>
+        <div class="balance-footer">
+            <div class="balance-stats">
+                <div class="balance-stat">
+                    <span class="balance-stat-label">Level</span>
+                    <span class="balance-stat-value" id="balance-level">1</span>
+                </div>
+                <div class="balance-stat">
+                    <span class="balance-stat-label">Reputasi</span>
+                    <span class="balance-stat-value" id="balance-rep">50</span>
+                </div>
+                <div class="balance-stat">
+                    <span class="balance-stat-label">Hari</span>
+                    <span class="balance-stat-value" id="balance-day">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <button class="quick-action" onclick="switchTab('toko')">
+            <div class="quick-action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </div>
+            <span class="quick-action-label">Toko</span>
+        </button>
+        <button class="quick-action" onclick="switchTab('karyawan')">
+            <div class="quick-action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <span class="quick-action-label">Karyawan</span>
+        </button>
+        <button class="quick-action" onclick="switchTab('peta')">
+            <div class="quick-action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+            </div>
+            <span class="quick-action-label">Peta</span>
+        </button>
+        <button class="quick-action" onclick="switchTab('upgrade')">
+            <div class="quick-action-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <span class="quick-action-label">Upgrade</span>
+        </button>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">Aktivitas Hari Ini</span>
+        </div>
+        <div class="log" id="log"></div>
+    </div>
+
+</section>
+
+<section id="tab-toko" class="tab-content">
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">Manajemen Stok</span>
+        </div>
+        <div id="products-list"></div>
+    </div>
+</section>
+
+<section id="tab-karyawan" class="tab-content">
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">Karyawan</span>
+        </div>
+        <div id="employees-list"></div>
+        <button class="btn btn-full" id="btn-hire" style="margin-top:12px">Rekrut Karyawan Baru</button>
+    </div>
+</section>
+
+<section id="tab-peta" class="tab-content">
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">Peta Cabang — Indonesia</span>
+        </div>
+        <div id="map"></div>
+    </div>
+</section>
+
+<section id="tab-upgrade" class="tab-content">
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">Upgrade Toko</span>
+        </div>
+        <div id="upgrades-list"></div>
+    </div>
+</section>
+
+</main>
+
+<nav class="bottom-nav">
+    <button class="bottom-nav-item active" data-tab="dashboard">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="toko">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span>Toko</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="peta">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        <span>Peta</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="karyawan">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+        <span>Karyawan</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="upgrade">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        <span>Upgrade</span>
+    </button>
+</nav>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <h3 id="modal-title">Title</h3>
+        <div id="modal-body"></div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">Batal</button>
+            <button class="btn" id="modal-confirm">Konfirmasi</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
